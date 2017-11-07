@@ -12,11 +12,10 @@ module.exports = {
     this._super.included.apply(this, arguments);
     this._ensureThisImport();
 
-    if (!process.env.EMBER_CLI_FASTBOOT) {
-      this.import('vendor/nouislider.js');
-      this.import('vendor/nouislider.min.css');
-      this.import('vendor/shims/nouislider.js');
-    }
+    // Import things
+    this.import('vendor/nouislider.js');
+    this.import('vendor/nouislider.min.css');
+    this.import('vendor/shims/nouislider.js');
   },
 
   treeForVendor: function(vendorTree) {
