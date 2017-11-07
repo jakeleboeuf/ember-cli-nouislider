@@ -3,6 +3,7 @@
 var path = require('path');
 var Funnel = require('broccoli-funnel');
 var MergeTrees = require('broccoli-merge-trees');
+var map = require('broccoli-stew').map;
 
 module.exports = {
   name: 'ember-cli-nouislider',
@@ -19,9 +20,27 @@ module.exports = {
   },
 
   treeForVendor: function(vendorTree) {
-    var nouisliderTree = new Funnel(path.dirname(require.resolve('nouislider/distribute/nouislider.js')), {
-      files: ['nouislider.js', 'nouislider.min.css'],
-    });
+    var nouisliderTree = new Funnel(
+      path.dirname(require.resolve('nouislider/distribute/nouislider.js'))
+    );
+
+    browserVendorLib = map(
+      browserVendorLib,
+      content => `if (typeof FastBoot === 'undefined') { ${content} }`
+    );
+
+    return new MergeTrees([vendorTree, nouisliderTree]);
+  },
+
+  treeForStyles: function(vendorTree) {
+    var nouisliderTree = new Funnel(
+      path.dirname(require.resolve('nouislider/distribute/nouislider.min.css'))
+    );
+
+    browserVendorLib = map(
+      browserVendorLib,
+      content => `if (typeof FastBoot === 'undefined') { ${content} }`
+    );
 
     return new MergeTrees([vendorTree, nouisliderTree]);
   },
